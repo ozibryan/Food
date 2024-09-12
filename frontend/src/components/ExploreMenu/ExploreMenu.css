@@ -10,7 +10,7 @@
 }
 
 .explore-menu-text {
-    max-width: 60%;
+    max-width: 70%;
     color: #808080;
 }
 
@@ -24,11 +24,9 @@
     overflow-x: scroll;
 }
 
-/*
 .explore-menu-list::-webkit-scrollbar {
     display: none;
-} */
-
+}
 
 .explore-menu-list-item img {
     width: 7.5vw;
