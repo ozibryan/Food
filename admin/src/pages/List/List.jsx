@@ -41,7 +41,7 @@ const List = () => {
         <div className='list add flex-col'>
             <p> All Food List </p>
             <div className='list-table'>
-                <div className="list-table-format.title">
+                <div className="list-table-format title">
                     <b>Image</b>
                     <b>Name</b>
                     <b>Category</b>

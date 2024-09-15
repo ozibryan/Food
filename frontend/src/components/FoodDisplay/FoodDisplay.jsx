@@ -9,6 +9,7 @@ const FoodDisplay = ({ category }) => {
     const { food_list } = useContext(StoreContext)
 
     console.log(food_list)
+    console.log(category)
 
     return (
         <div className='food-display' id='food-display'>

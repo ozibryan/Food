@@ -7,6 +7,7 @@ const FoodItem = ({ id, name, description, price, image }) => {
 
 
     const { cartItems, addToCart, removeFromCart, url } = useContext(StoreContext);
+
     // const [itemCount, setItemCount] = useState(0);
 
     return (
