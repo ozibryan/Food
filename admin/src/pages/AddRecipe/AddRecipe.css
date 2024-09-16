@@ -43,3 +43,32 @@
     color: white;
     cursor: pointer;
 }
+
+/* Add or adjust styles for the new elements */
+.add-img-upload img {
+    width: 120px;
+    height: auto;
+    object-fit: cover;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.index-list ul {
+    padding: 0;
+    list-style: none;
+}
+
+.index-list li {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.index-list img {
+    border-radius: 4px;
+}
