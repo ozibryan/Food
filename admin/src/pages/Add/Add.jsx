@@ -17,11 +17,6 @@ const Add = () => {
         category: 'Salad'
     })
 
-    const onChangeHandler = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setData(data => ({ ...data, [name]: value }))
-    }
 
     const onSubmitHandler = async (event) => {
         event.preventDefault();
@@ -33,6 +28,9 @@ const Add = () => {
         formData.append("category", data.category)
         formData.append("image", image)
 
+
+        console.log(data)
+        console.log(image)
 
         const response = await axios.post(`${url}/api/food/add`, formData);
 
@@ -51,7 +49,11 @@ const Add = () => {
         }
     }
 
-
+    const onChangeHandler = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setData(data => ({ ...data, [name]: value }))
+    }
 
     return (
         <div className='add'>

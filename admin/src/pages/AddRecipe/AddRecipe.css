@@ -39,7 +39,17 @@
     max-width: 120px;
     border: none;
     padding: 10px;
-    background-color: black;
+    background-color: rgb(179, 228, 191);
+    color: white;
+    cursor: pointer;
+}
+
+.add-upd-btn {
+    max-width: 120px;
+    border: none;
+    margin: 7px;
+    padding: 10px;
+    background-color: rgb(171, 228, 192);
     color: white;
     cursor: pointer;
 }

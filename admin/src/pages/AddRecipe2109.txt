@@ -11,6 +11,8 @@ const AddRecipe = () => {
 
     const [ingredients, setIngredients] = useState([]);
 
+    const [preparation, setPreparation] = useState([])
+
     const [ingredient, setIngredient] = useState({
         image: null,
         quantity: '',
@@ -19,13 +21,6 @@ const AddRecipe = () => {
         name: '',
         substitute: '' // Single text field for substitutes
     });
-
-    const [instructions, setInstructions] = useState([]);
-
-    const [instruction, setInstruction] = useState({
-        step: '',
-        instruction: ''
-    })
 
 
     const [isEditing, setIsEditing] = useState(false); // To track whether we're in edit mode
@@ -83,10 +78,6 @@ const AddRecipe = () => {
         }
     };
 
-    //
-    <img src={recipeImage ? URL.createObjectURL(recipeImage) : assets.upload_area} alt='' />
-    // 
-
     // Clean up object URLs when component unmounts
     useEffect(() => {
         return () => {
@@ -104,7 +95,7 @@ const AddRecipe = () => {
     // Function to add or edit an ingredient 
 
     const addOrEditIngredient = () => {
-        const { image, name, quantity, measure, weight, substitute } = ingredient;
+        const { image, name, quantity, measure } = ingredient;
         if (image && name && quantity && measure) {
             if (isEditing) {
                 // Update the existing ingredient at the editIndex
@@ -123,9 +114,7 @@ const AddRecipe = () => {
     };
 
     console.log(data)
-    console.log(recipeImage)
     console.log(ingredients)
-
 
     const onSubmitHandler = async (event) => {
         event.preventDefault();
@@ -137,28 +126,18 @@ const AddRecipe = () => {
         formData.append("category", data.category);
         formData.append("cuisine", data.cuisine);
         formData.append("preptime", data.preptime);
-        formData.append("image", recipeImage);  // For the main recipe image
+        formData.append("image", recipeImage);
 
-        // Append ingredients as an array (which the backend expects)
-        ingredients.forEach((ingredient, index) => {
-            formData.append(`ingredients[${index}][name]`, ingredient.name);
-            formData.append(`ingredients[${index}][quantity]`, ingredient.quantity);
-            formData.append(`ingredients[${index}][measure]`, ingredient.measure);
-            if (ingredient.weight) {
-                formData.append(`ingredients[${index}][weight]`, ingredient.weight);
+        // Append each ingredient and its image to FormData
+        ingredients.forEach((ing, index) => {
+            formData.append(`ingredient_name_${index}`, ingredient.name);
+            formData.append(`ingredient_quantity_${index}`, ingredient.quantity);
+            formData.append(`ingredient_measure_${index}`, ingredient.measure);
+            formData.append(`ingredient_weight_${index})`, ing.weight);
+            formData.append(`ingredient_substitute_${index}`, ingredient.substitute);
+            if (ing.image) {
+                formData.append(`ingredient_image_${index}`, ingredient.image);
             }
-            if (ingredient.substitute) {
-                formData.append(`ingredients[${index}][substitute]`, ingredient.substitute);
-            }
-            if (ingredient.image) {
-                formData.append(`ingredients[${index}][image]`, ingredient.image); // For ingredient-specific images
-            }
-        });
-
-        // Optionally append instructions if you are adding them
-        instructions.forEach((instruction, index) => {
-            formData.append(`instruction[${index}][step]`, instruction.step);
-            formData.append(`instruction[${index}][instruction]`, instruction.instruction);
         });
 
 
@@ -374,9 +353,6 @@ const AddRecipe = () => {
                     />
                 </div>
 
-                { /* ...  Insert instructions here  */}
-
-
                 {/* Button to add or update the ingredient */}
                 <button type='button' className='add-upd-btn' onClick={addOrEditIngredient}>
                     {isEditing ? 'Update Ingredient ' : 'Add Ingredient'}
@@ -390,7 +366,7 @@ const AddRecipe = () => {
                                 {ing.image && (
                                     <img src={ing.image.preview} alt={ing.name} width={50} height={50} />
                                 )}
-                                {ing.quantity} {ing.measure} of {ing.name}  {ing.substitute} {ing.weight}
+                                {ing.quantity} {ing.measure} of {ing.name}  {ing.substitute}
                                 <div className="add-del-button">
                                     <button className='add-upd-btn' type='button' onClick={() => editIngredient(index)}>Edit</button>
                                     <button className='add-upd-btn' type='button' onClick={() => removeIngredient(index)}>Remove</button>
