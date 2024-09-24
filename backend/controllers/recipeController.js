@@ -14,8 +14,8 @@ const addRecipe = async (req, res) => {
     const ingredientImages = req.files['ingredientImages'] || [];
 
     // Handle recipeImage (main image) and ingredientImages (array of ingredient images)
-    console.log('Recipe Image:', recipeImage);
-    console.log('Ingredient Images:', ingredientImages);
+    console.log('Controller Recipe Image:', recipeImage);
+    console.log('Controller Ingredient Images:', ingredientImages);
 
     const recipe = new recipeModel({
         name: req.body.name,

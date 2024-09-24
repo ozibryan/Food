@@ -105,7 +105,7 @@ const AddRecipe1 = () => {
 
     const addOrEditIngredient = () => {
         const { image, name, quantity, measure, weight, substitute } = ingredient;
-        if (image && name && quantity && measure) {
+        if (image && name && quantity && measure && weight && substitute) {
             if (isEditing) {
                 // Update the existing ingredient at the editIndex
                 const updatedIngredients = [...ingredients];
