@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import { addRecipe, listRecipe, removeRecipe } from '../controllers/recipeController.js';
+import { addRecipe1, listRecipe, removeRecipe } from '../controllers/recipeController.js';
 
 const router = express.Router();
 
@@ -44,11 +44,11 @@ const upload = multer({
 ]);
 
 
-router.post('/add', addRecipe)
+router.post('/add', addRecipe1)
 
 // Route to add a recipe
-router.get('/list', listRecipe);                               // Route to get all recipes    
+// router.get('/list', listRecipe);                               // Route to get all recipes    
 
-router.delete('/remove', removeRecipe);                        // Route to remove a recipe
+// router.delete('/remove', removeRecipe);                        // Route to remove a recipe
 
-export default router;
+export default recipeRouter;
