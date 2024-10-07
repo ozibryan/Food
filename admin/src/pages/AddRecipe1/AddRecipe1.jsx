@@ -164,7 +164,7 @@ const AddRecipe1 = () => {
 
 
         try {
-            const response = await axios.post(`${url}/api/recipe/add`, formData, {
+            const response = await axios.post(`${url}/api/recipe1/add`, formData, {
                 headers: {
                     'Content-Type': 'mulitpart/form-data'
                 }
@@ -220,7 +220,7 @@ const AddRecipe1 = () => {
                 </div>  */}
 
                 <div className="add-img-upload flex-col">
-                    <p>Upload Recipe Image</p>
+                    <p>Upload Recipe 1 Image</p>
 
                     <label htmlFor="recipeImage">
                         <img src={recipeImage ? URL.createObjectURL(recipeImage) : assets.upload_area} alt='' />

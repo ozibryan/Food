@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import './AddRecipe.css';
-import { assets } from '../../assets/assets';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from "react";
+import "./AddRecipe.css";
+import { assets } from "../../assets/assets";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddRecipe = () => {
-    const url = 'http://localhost:4000';
+    const url = "http://localhost:4000";
 
     const [recipeImage, setRecipeImage] = useState(null);
 
@@ -13,43 +14,41 @@ const AddRecipe = () => {
 
     const [ingredient, setIngredient] = useState({
         image: null,
-        quantity: '',
-        measure: '',
-        weight: '',
-        name: '',
-        substitute: '' // Single text field for substitutes
+        quantity: "",
+        measure: "",
+        weight: "",
+        name: "",
+        substitute: "", // Single text field for substitutes
     });
 
     const [instructions, setInstructions] = useState([]);
-
     const [instruction, setInstruction] = useState({
         step: '',
         instruction: ''
-    })
+    });
 
 
     const [isEditing, setIsEditing] = useState(false); // To track whether we're in edit mode
     const [editIndex, setEditIndex] = useState(null); // To track the index of the item being edited
 
-
     const [data, setData] = useState({
-        name: '',
-        description: '',
-        category: 'Salad',
-        cuisine: 'Thai',
-        preptime: 0
+        name: "",
+        description: "",
+        category: "Salad",
+        cuisine: "Thai",
+        preptime: 0,
     });
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
         const value = event.target.value;
-        setData(data => ({ ...data, [name]: value }));
+        setData((data) => ({ ...data, [name]: value }));
     };
 
     const onIngredientChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
-        setIngredient(ingredient => ({ ...ingredient, [name]: value }));
+        setIngredient((ingredient) => ({ ...ingredient, [name]: value }));
     };
 
     // Function to start editing an ingredient
@@ -65,10 +64,16 @@ const AddRecipe = () => {
         if (isEditing && editIndex === index) {
             setIsEditing(false); // Cancel edit mode if the item being edited is deleted
             setEditIndex(null);
-            setIngredient({ image: null, name: '', quantity: '', measure: '', weight: ' ', substitute: '' });
+            setIngredient({
+                image: null,
+                name: "",
+                quantity: "",
+                measure: "",
+                weight: " ",
+                substitute: "",
+            });
         }
     };
-
 
     const handleIngredientImageUpload = (event) => {
         const file = event.target.files[0];
@@ -79,19 +84,22 @@ const AddRecipe = () => {
             }
             // Create a new object URL for preview
             file.preview = URL.createObjectURL(file);
-            setIngredient(ingredient => ({ ...ingredient, image: file }));
+            setIngredient((ingredient) => ({ ...ingredient, image: file }));
         }
     };
 
     //
-    <img src={recipeImage ? URL.createObjectURL(recipeImage) : assets.upload_area} alt='' />
-    // 
+    <img
+        src={recipeImage ? URL.createObjectURL(recipeImage) : assets.upload_area}
+        alt=""
+    />;
+    //
 
     // Clean up object URLs when component unmounts
     useEffect(() => {
         return () => {
             // Revoke object URLs when the component unmounts to free memory
-            ingredients.forEach(ing => {
+            ingredients.forEach((ing) => {
                 if (ing.image && ing.image.preview) {
                     URL.revokeObjectURL(ing.image.preview);
                 }
@@ -99,9 +107,7 @@ const AddRecipe = () => {
         };
     }, [ingredients]);
 
-
-
-    // Function to add or edit an ingredient 
+    // Function to add or edit an ingredient
 
     const addOrEditIngredient = () => {
         const { image, name, quantity, measure, weight, substitute } = ingredient;
@@ -118,18 +124,24 @@ const AddRecipe = () => {
                 setIngredients([...ingredients, ingredient]);
             }
             // Clear the form after submission
-            setIngredient({ image: null, name: '', quantity: '', measure: '', weight: '', substitute: '' });
+            setIngredient({
+                image: null,
+                name: "",
+                quantity: "",
+                measure: "",
+                weight: "",
+                substitute: "",
+            });
         }
     };
 
-    console.log(data)
-    console.log(recipeImage)
-    console.log(ingredients)
-
+    console.log(data);
+    console.log(recipeImage);
+    console.log(ingredients);
 
     const onSubmitHandler = async (event) => {
         event.preventDefault();
-        console.log('got here')
+        console.log("got here");
 
         const formData = new FormData();
         formData.append("name", data.name);
@@ -137,10 +149,11 @@ const AddRecipe = () => {
         formData.append("category", data.category);
         formData.append("cuisine", data.cuisine);
         formData.append("preptime", data.preptime);
-        formData.append("image", recipeImage);  // For the main recipe image
+        formData.append("recipeImage", recipeImage); // For the main recipe image
 
         // Append ingredients as an array (which the backend expects)
         ingredients.forEach((ingredient, index) => {
+            console.log("hello", ingredient, index);
             formData.append(`ingredients[${index}][name]`, ingredient.name);
             formData.append(`ingredients[${index}][quantity]`, ingredient.quantity);
             formData.append(`ingredients[${index}][measure]`, ingredient.measure);
@@ -148,38 +161,41 @@ const AddRecipe = () => {
                 formData.append(`ingredients[${index}][weight]`, ingredient.weight);
             }
             if (ingredient.substitute) {
-                formData.append(`ingredients[${index}][substitute]`, ingredient.substitute);
+                formData.append(
+                    `ingredients[${index}][substitute]`,
+                    ingredient.substitute
+                );
             }
             if (ingredient.image) {
-                formData.append(`ingredients[${index}][image]`, ingredient.image); // For ingredient-specific images
+                formData.append(`ingredientImages`, ingredient.image);
+                // formData.append(`ingredients[${index}][image]`, ingredient.image); 
             }
         });
 
         // Optionally append instructions if you are adding them
         instructions.forEach((instruction, index) => {
             formData.append(`instruction[${index}][step]`, instruction.step);
-            formData.append(`instruction[${index}][instruction]`, instruction.instruction);
+            formData.append(
+                `instruction[${index}][instruction]`,
+                instruction.instruction
+            );
         });
-
-
 
         try {
             const response = await axios.post(`${url}/api/recipe/add`, formData, {
                 headers: {
-                    'Content-Type': 'mulitpart/form-data'
-                }
+                    "Content-Type": "mulitpart/form-data",
+                },
             });
-
-
 
             if (response.data.success) {
                 setData({
-                    name: '',
-                    description: '',
-                    price: '',
-                    category: 'Salad',
-                    cuisine: 'Thai',
-                    preptime: 0
+                    name: "",
+                    description: "",
+                    price: "",
+                    category: "Salad",
+                    cuisine: "Thai",
+                    preptime: 0,
                 });
 
                 setRecipeImage(null);
@@ -194,11 +210,25 @@ const AddRecipe = () => {
         }
     };
 
+    const onInstructionChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setInstruction(instruction => ({ ...instruction, [name]: value }));
+    };
+
+    const addOrEditInstruction = () => {
+        const { step, instruction: instructionText } = instruction;
+        if (step && instructionText) {
+            setInstructions([...instructions, instruction]);
+            setInstruction({ step: '', instruction: '' });
+        }
+    };
+
+
+
     return (
-        <div className='add'>
-
-            <form className='flex-col' onSubmit={onSubmitHandler}>
-
+        <div className="add">
+            <form className="flex-col" onSubmit={onSubmitHandler}>
                 {/*
                 <div className="add-img-upload flex-col">
                     <p>Upload Recipe Image .. 1</p>
@@ -223,12 +253,27 @@ const AddRecipe = () => {
                     <p>Upload Recipe Image</p>
 
                     <label htmlFor="recipeImage">
-                        <img src={recipeImage ? URL.createObjectURL(recipeImage) : assets.upload_area} alt='' />
+                        <img
+                            src={
+                                recipeImage
+                                    ? URL.createObjectURL(recipeImage)
+                                    : assets.upload_area
+                            }
+                            alt=""
+                        />
                     </label>
 
-                    <input onChange={(e) => { setRecipeImage(e.target.files[0]); e.target.value = '' }} type="file" accept='Image/*' id='recipeImage' hidden />
+                    <input
+                        onChange={(e) => {
+                            setRecipeImage(e.target.files[0]);
+                            e.target.value = "";
+                        }}
+                        type="file"
+                        accept="Image/*"
+                        id="recipeImage"
+                        hidden
+                    />
                 </div>
-
 
                 <div className="add-product-name flex-col">
                     <p>Recipe Name</p>
@@ -236,8 +281,8 @@ const AddRecipe = () => {
                         onChange={onChangeHandler}
                         value={data.name}
                         type="text"
-                        name='name'
-                        placeholder='Type here'
+                        name="name"
+                        placeholder="Type here"
                     />
                 </div>
 
@@ -247,29 +292,27 @@ const AddRecipe = () => {
                         onChange={onChangeHandler}
                         value={data.description}
                         name="description"
-                        rows='6'
-                        placeholder='Write content here'
+                        rows="6"
+                        placeholder="Write content here"
                         required
                     />
                 </div>
 
-                <div className='add-category-price'>
+                <div className="add-category-price">
                     <div className="add-category flex-col">
                         <p>Recipe Category</p>
-                        <select onChange={onChangeHandler} name="category">
-                            <option value="Salad">Salads</option>
-                            <option value="Rolls">Rolls</option>
-                            <option value="Desserts">Desserts</option>
-                            <option value="Sandwich">Sandwich</option>
-                            <option value="Cake">Cake</option>
-                            <option value="Pure Veg">Pure Veg</option>
-                            <option value="Pasta">Pasta</option>
-                            <option value="Noodles">Noodles</option>
+                        <select onChange={onChangeHandler} name="cuisine">
+                            <option value="Asian">Asian</option>
+                            <option value="Thai">Thai</option>
+                            <option value="French">French</option>
+                            <option value="Mediterranean">Mediterranean</option>
+                            <option value="Vegetarian">Vegetarian</option>
+                            <option value="Vegan">Vegan</option>
                         </select>
                     </div>
                 </div>
 
-                <div className='add-category-price'>
+                <div className="add-category-price">
                     <div className="add-category flex-col">
                         <p>Cusine </p>
                         <select onChange={onChangeHandler} name="cusine">
@@ -282,27 +325,37 @@ const AddRecipe = () => {
                         </select>
                     </div>
 
-
-
                     <div className="add-price flex-col">
                         <p>Prep Time (Mins) </p>
                         <input
                             onChange={onChangeHandler}
-                            value={data.price}
-                            type="number, min: 0"
+                            value={data.preptime}
+                            type="number"
+                            min="0"
                             name='preptime'
                             placeholder='10'
                         />
                     </div>
+
                 </div>
                 <div className="add-img-upload flex-col">
                     <p>Upload Ingredient Image</p>
 
                     <label htmlFor="image">
                         {ingredient.image ? (
-                            <img src={URL.createObjectURL(ingredient.image)} alt="Ingredient" width={100} height={100} />
+                            <img
+                                src={URL.createObjectURL(ingredient.image)}
+                                alt="Ingredient"
+                                width={100}
+                                height={100}
+                            />
                         ) : (
-                            <img src={assets.upload_area} alt="Upload area" width={100} height={100} />
+                            <img
+                                src={assets.upload_area}
+                                alt="Upload area"
+                                width={100}
+                                height={100}
+                            />
                         )}
                     </label>
 
@@ -321,8 +374,8 @@ const AddRecipe = () => {
                         onChange={onIngredientChange}
                         value={ingredient.name}
                         type="text"
-                        name='name'
-                        placeholder='Ingredient name'
+                        name="name"
+                        placeholder="Ingredient name"
                     />
                 </div>
 
@@ -333,7 +386,7 @@ const AddRecipe = () => {
                         value={ingredient.quantity}
                         type="text"
                         name="quantity"
-                        placeholder='Quantity'
+                        placeholder="Quantity"
                     />
                 </div>
 
@@ -345,7 +398,7 @@ const AddRecipe = () => {
                             value={ingredient.measure}
                             type="text"
                             name="measure"
-                            placeholder='cup, g, ml...'
+                            placeholder="cup, g, ml..."
                         />
                     </div>
                 </div>
@@ -358,7 +411,7 @@ const AddRecipe = () => {
                             value={ingredient.weight}
                             type="text"
                             name="weight"
-                            placeholder='approx weight...'
+                            placeholder="approx weight..."
                         />
                     </div>
                 </div>
@@ -370,16 +423,19 @@ const AddRecipe = () => {
                         value={ingredient.substitute}
                         type="text"
                         name="substitute"
-                        placeholder='Substitute (optional)'
+                        placeholder="Substitute (optional)"
                     />
                 </div>
 
-                { /* ...  Insert instructions here  */}
-
+                {/* ...  Insert instructions here  */}
 
                 {/* Button to add or update the ingredient */}
-                <button type='button' className='add-upd-btn' onClick={addOrEditIngredient}>
-                    {isEditing ? 'Update Ingredient ' : 'Add Ingredient'}
+                <button
+                    type="button"
+                    className="add-upd-btn"
+                    onClick={addOrEditIngredient}
+                >
+                    {isEditing ? "Update Ingredient " : "Add Ingredient"}
                 </button>
 
                 {/* Render the list of ingredients */}
@@ -388,20 +444,39 @@ const AddRecipe = () => {
                         {ingredients.map((ing, index) => (
                             <li key={index}>
                                 {ing.image && (
-                                    <img src={ing.image.preview} alt={ing.name} width={50} height={50} />
+                                    <img
+                                        src={ing.image.preview}
+                                        alt={ing.name}
+                                        width={50}
+                                        height={50}
+                                    />
                                 )}
-                                {ing.quantity} {ing.measure} of {ing.name}  {ing.substitute} {ing.weight}
+                                {ing.quantity} {ing.measure} of {ing.name} {ing.substitute}{" "}
+                                {ing.weight}
                                 <div className="add-del-button">
-                                    <button className='add-upd-btn' type='button' onClick={() => editIngredient(index)}>Edit</button>
-                                    <button className='add-upd-btn' type='button' onClick={() => removeIngredient(index)}>Remove</button>
+                                    <button
+                                        className="add-upd-btn"
+                                        type="button"
+                                        onClick={() => editIngredient(index)}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        className="add-upd-btn"
+                                        type="button"
+                                        onClick={() => removeIngredient(index)}
+                                    >
+                                        Remove
+                                    </button>
                                 </div>
                             </li>
                         ))}
                     </ul>
                 </div>
-                <button type='submit' className='add-btn' >ADD</button>
+                <button type="submit" className="add-btn">
+                    ADD
+                </button>
             </form>
-
         </div>
     );
 };

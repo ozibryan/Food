@@ -1,39 +1,61 @@
-import recipeModel from '../models/recipeModel.js';
-import fs from 'fs';
-
-// Add recipe
-
-console.log('recipe router');
+import recipeModel from "../models/recipeModel.js";
+import fs from "fs";
 
 const addRecipe = async (req, res) => {
-    console.log(req.body);
-    console.log(req.file);
-    let image_filename = req.file ? req.file.filename : '';
-
-    const recipeImage = req.files['recipeImage'] ? req.files['recipeImage'][0] : null;
-    const ingredientImages = req.files['ingredientImages'] || [];
-
-    // Handle recipeImage (main image) and ingredientImages (array of ingredient images)
-    console.log('Controller Recipe Image:', recipeImage);
-    console.log('Controller Ingredient Images:', ingredientImages);
-
-    const recipe = new recipeModel({
-        name: req.body.name,
-        description: req.body.description,
-        price: req.body.price,
-        category: req.body.category,
-        image: image_filename,
-        cuisine: req.body.cuisine,
-        preptime: req.body.preptime,
-        ingredients: JSON.parse(req.body.ingredients) // Assuming ingredients are sent as a JSON string
-    });
-
     try {
+        console.log("Files:", req.files);
+        console.log("Body:", req.body);
+
+        const recipeImage =
+            req.files["recipeImage"] && req.files["recipeImage"][0]
+                ? req.files["recipeImage"][0].filename
+                : null;
+
+        const ingredientImages = req.files["ingredientImages"] || [];
+
+        let ingredients = [];
+
+        if (req.body.ingredients) {
+            ingredients = Array.isArray(req.body.ingredients)
+                ? req.body.ingredients
+                : JSON.parse(req.body.ingredients);
+        }
+
+        if (ingredients.length > 0) {
+            ingredients = ingredients.map((ingredient, index) => {
+                const imageFilename = ingredientImages[index]
+                    ? ingredientImages[index].filename
+                    : null;
+
+                return {
+                    ...ingredient,
+                    image: imageFilename,
+                };
+            });
+        }
+
+        const recipe = new recipeModel({
+            name: req.body.name,
+            description: req.body.description,
+            category: req.body.category,
+            cuisine: req.body.cuisine,
+            preptime: req.body.preptime,
+            image: recipeImage,
+            ingredients: ingredients,
+        });
+
         await recipe.save();
-        res.json({ success: true, message: "Recipe Added" });
+
+        res.json({ success: true, message: "Recipe Added Successfully" });
     } catch (error) {
-        console.log(error.message);
-        res.json({ success: false, message: "Error" });
+        console.error("Error adding recipe:", error.message);
+        res
+            .status(500)
+            .json({
+                success: false,
+                message: "Error adding recipe",
+                error: error.message,
+            });
     }
 };
 
@@ -64,4 +86,4 @@ const removeRecipe = async (req, res) => {
     }
 };
 
-export { addRecipe, listRecipe, removeRecipe };
+export { addRecipe, listRecipe, removeRecipe }

@@ -1,0 +1,313 @@
+.sub-main {
+    background-color: #f6f6f6;
+    padding: 10px;
+}
+
+.menu-container {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.menu-image {
+    object-fit: cover;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+.menu-head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.menu-items {
+    display: flex;
+    align-items: center;
+}
+
+.menu-main {
+    padding: 20px;
+    background-color: white;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    width: 400px;
+}
+
+.menu-items {
+    display: flex;
+    gap: 10px;
+}
+
+.menu-buttons-main {
+    display: flex;
+    gap: 10px;
+}
+
+.save-button {
+    background-color: white;
+    color: black;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 1px solid gray;
+    border-radius: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.plan-button {
+    background-color: #FA9947;
+    color: white;
+    border: 0;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.menu-company-main {
+    display: flex;
+    margin-top: 10px;
+    gap: 5px;
+}
+
+.menu-bookmark-main {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.menu-bookmark {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+
+}
+
+.menu-instructions-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.instructions {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.menu-description {
+    font-size: 12px;
+    padding: 10px;
+    color: gray;
+}
+
+.menu-head {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.balance-main {
+    background-color: white;
+    padding: 20px;
+    border-radius: 25px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.balance-head {
+    margin-top: 10px;
+}
+
+.balance-button {
+    background-color: #FBCDCF;
+    color: black;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 0;
+    border-radius: 20px;
+    font-weight: bold;
+
+}
+
+.balance-button-main {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.balance-index-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.calories-balance-main {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.view-balance {
+    text-align: center;
+    color: gray;
+    font-size: 12px;
+    margin-top: 20px;
+}
+
+.ads {
+    width: 770px;
+    height: 100px;
+    background-color: white;
+    margin-top: 20px;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.ingredients-main {
+    background-color: white;
+    margin-top: 20px;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.ing-cont {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+
+}
+
+.ing-head {
+    font-size: 16px;
+}
+
+.ing-units {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+}
+
+.serv-ing {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ing-oil {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.ing-items {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 50%;
+}
+
+.instructions-main {
+    background-color: white;
+    margin-top: 20px;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.instructions-head-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.print-button {
+    height: 40px;
+    width: 40px;
+    padding: 10px;
+    border-radius: 12px;
+    background-color: white;
+    border: 1px solid gray;
+}
+
+.instruction-head {
+    font-size: 20px;
+}
+
+.print-icon {
+    height: 20px;
+    width: 20px;
+}
+
+.external-site {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    gap: 5px;
+}
+
+.arrow-out {
+    height: 16px;
+    width: 16px;
+    color: gray;
+    font-weight: bold;
+}
+
+.external-link-icon {
+    font-size: 14px;
+    color: gray;
+    font-weight: bold;
+}
+
+.external-site-two-main {
+    background: #d3d3d3;
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.external-site-div {
+    height: 16px;
+    width: 16px;
+    color: gray;
+    font-weight: bold;
+}
+
+.button-to-list {
+    background-color: #FA9947;
+    color: white;
+    border: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.convert-unit-btn {
+    background-color: white;
+    color: black;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid gray;
+    border-radius: 20px;
+}
+
+.items-detailed {
+    font-size: 12px;
+}
