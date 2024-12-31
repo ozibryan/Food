@@ -36,6 +36,11 @@ const Navbar = ({ setShowLogin }) => {
                     <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
                 </div>
 
+                <div className="navbar-search-icon">
+                    <Link to='/plans'>Plans</Link>
+                    {/* <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div> */}
+                </div>
+
                 {!token ? <button onClick={() => setShowLogin(true)}>sign in</button>
                     : <div className="navbar-profile">
 

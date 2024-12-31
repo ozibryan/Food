@@ -31,3 +31,7 @@ a {
     opacity: 1;
   }
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
