@@ -4,6 +4,7 @@ const Ingridents = ({
   selectedIngredients,
   data,
   url,
+  servingCount
 }) => {
   const handleIngredients = (ingredients) => {
     setSelectedIngredients([...selectedIngredients, { ingredients }]);
@@ -31,7 +32,7 @@ const Ingridents = ({
             alt={`ing image ${index + 1}`}
           />
           <p className="items-detailed">
-            {item.quantity} {item.measure} of {item.name} {item.substitute}{" "}
+            {item.quantity*servingCount} {item.measure} of {item.name} {item.substitute}{" "}
             {item.weight}
           </p>
         </div>

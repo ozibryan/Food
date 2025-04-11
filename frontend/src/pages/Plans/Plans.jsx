@@ -7,13 +7,15 @@ import RecipeItem from "./RecipeItem";
 import MealSlot from "./MealSlot";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick"; // Import the Slider component from react-slick
+import Slider from "react-slick";
 import "./plan.css";
 import {
   IoIosArrowDroprightCircle,
   IoIosArrowDropdownCircle,
 } from "react-icons/io";
 import { TiDelete } from "react-icons/ti";
+import { Pdf } from "./Pdf";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 const Plans = () => {
   const { url } = useContext(StoreContext);
@@ -43,14 +45,13 @@ const Plans = () => {
       .get("http://localhost:4000/api/plans")
       .then((res) => {
         setPlans(res.data);
-        console.log(res.data);
+        console.log("hello", res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  // Fetching saved meal plans
   const mealPlansApi = () => {
     axios
       .get("http://localhost:4000/api/meal-plan")
@@ -76,7 +77,7 @@ const Plans = () => {
 
   useEffect(() => {
     plansApi();
-    mealPlansApi(); // Fetch meal plans on component load
+    mealPlansApi();
   }, []);
 
   const daysOfWeek = [
@@ -90,9 +91,12 @@ const Plans = () => {
   ];
 
   const handleDrop = (item, day, mealType) => {
-    console.log("Dropped item:", item); // Check what data is inside item
+    // Check if the mealType already has an item
+    if (schedule[day][mealType].length >= 1) {
+      alert("You cannot add more than one item to this meal slot.");
+      return;
+    }
 
-    // Update the local state
     setSchedule((prevSchedule) => ({
       ...prevSchedule,
       [day]: {
@@ -101,7 +105,6 @@ const Plans = () => {
       },
     }));
 
-    // API call to save the meal plan
     axios
       .post("http://localhost:4000/api/meal-plan", {
         day,
@@ -123,13 +126,12 @@ const Plans = () => {
     }));
   };
 
-  // Slider settings for react-slick
   const sliderSettings = {
-    dots: false, // Show navigation dots
-    infinite: true, // Infinite loop
-    speed: 500, // Transition speed
-    slidesToShow: 6, // Show 3 slides at a time (change this as needed)
-    slidesToScroll: 1, // Scroll one slide at a time
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: plans.length > 6 ? 6 : plans.length,
+    slidesToScroll: 1,
     responsive: [
       {
         breakpoint: 1024,
@@ -150,17 +152,110 @@ const Plans = () => {
 
   const handleDelete = (item) => {
     console.log(item);
-    axios.delete(`http://localhost:4000/api/plans/${item._id || item.id}`).then((res)=>{
-      console.log(res);
-      mealPlansApi();
-    }).catch((err)=>{
-      console.log(err);
-    })  
-  }
+    axios
+      .delete(`http://localhost:4000/api/plans/${item._id || item.id}`)
+      .then((res) => {
+        console.log(res);
+        mealPlansApi();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleCart = (day) => {
+    if (schedule[day]) {
+      const dayItems = [];
+
+      Object.values(schedule[day]).forEach((meal) => {
+        dayItems.push(...meal);
+      });
+
+      axios
+        .post(`http://localhost:4000/api/shopping/add`, {
+          userId: 1,
+          items: dayItems,
+        })
+        .then((res) => {
+          console.log(res);
+          alert("Add to cart");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      console.log(day, dayItems, schedule);
+    } else {
+      console.log(`${day} is not a valid day`);
+    }
+  };
+
+  const handleAllCart = () => {
+    const allItems = [];
+    console.log(allItems, schedule);
+
+    Object.values(schedule).forEach((day) => {
+      Object.values(day).forEach((meal) => {
+        allItems.push(...meal);
+      });
+    });
+
+    axios
+      .post(`http://localhost:4000/api/shopping/add`, {
+        userId: 1,
+        items: allItems,
+      })
+      .then((res) => {
+        console.log(res);
+        alert("Add to cart");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getAllIngredients = (schedule) => {
+    const allIngredients = [];
+
+    Object.values(schedule).forEach((day) => {
+      Object.values(day).forEach((meal) => {
+        meal.forEach((recipe) => {
+          if (recipe.recipeReference && recipe.recipeReference.ingredients) {
+            allIngredients.push(...recipe.recipeReference.ingredients);
+          }
+        });
+      });
+    });
+
+    return allIngredients;
+  };
+
+  const allIngredientsArray = getAllIngredients(schedule);
+  console.log(allIngredientsArray);
+
+  console.log("heki", schedule);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div>
-        <h1 className="text-2xl">Plans</h1>
+        <div className="flex justify-between ">
+          <h1 className="text-2xl">Plans</h1>
+          <div className="flex gap-2">
+            <button
+              onClick={handleAllCart}
+              className="rounded-md bg-orange-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+            >
+              Add all to cart
+            </button>
+            <PDFDownloadLink
+              document={<Pdf schedule={schedule} url={url} allIngredientsArray={allIngredientsArray}/>}
+              fileName="MealSchedule.pdf"
+              className="rounded-md bg-orange-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-600"
+            >
+              {({ loading }) => (loading ? "Preparing PDF..." : "Download PDF")}
+            </PDFDownloadLink>
+          </div>
+        </div>
         <Slider {...sliderSettings} className="mt-4" draggable={false}>
           {plans.map((plan) => (
             <div
@@ -177,10 +272,17 @@ const Plans = () => {
           {daysOfWeek.map((day) => (
             <div key={day}>
               <div
-                className="border-t border-gray-200 py-1 px-2 my-2"
+                className="border-t border-gray-200 py-1 px-2 my-2 flex flex-row-reverse justify-between items-center"
                 onClick={() => toggleDay(day)}
               >
-                <h2 className="cursor-pointer text-gray-500 flex items-center justify-between">
+                <button
+                  onClick={() => handleCart(day)}
+                  className="rounded-md bg-orange-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                >
+                  Add to cart
+                </button>
+
+                <h2 className="cursor-pointer text-gray-500 flex items-center justify-between gap-2">
                   {collapsedDays[day] ? (
                     <>
                       {day.charAt(0).toUpperCase() + day.slice(1)}
@@ -195,8 +297,19 @@ const Plans = () => {
                 </h2>
               </div>
 
+              <div className="flex gap-2 bg-red-500 justify-between"></div>
+
               {!collapsedDays[day] && (
                 <div>
+                  <div className="flex">
+                    {["breakfast", "lunch", "dinner", "snacks"].map(
+                      (mealType) => (
+                        <h4 className="text-lg font-semibold w-96 ml-2">
+                          {mealType.charAt(0).toUpperCase() + mealType.slice(1)}
+                        </h4>
+                      )
+                    )}
+                  </div>
                   {/* Drop slots */}
                   <div className="flex gap-2">
                     {["breakfast", "lunch", "dinner", "snacks"].map(
@@ -215,10 +328,10 @@ const Plans = () => {
                     {["breakfast", "lunch", "dinner", "snacks"].map(
                       (mealType) => (
                         <div key={mealType} className="w-full">
-                          <h4 className="text-lg font-semibold">
+                          {/* <h4 className="text-lg font-semibold">
                             {mealType.charAt(0).toUpperCase() +
                               mealType.slice(1)}
-                          </h4>
+                          </h4> */}
                           {schedule[day][mealType].map((item, index) => (
                             <div key={index} className="my-2">
                               <div className="flex">
@@ -229,8 +342,11 @@ const Plans = () => {
                                   alt={item.name}
                                   className="h-28 w-28 object-cover rounded-lg"
                                 />
-                                <div onClick={()=>handleDelete(item)} className="cursor-pointer">
-                                  <TiDelete className="h-6 w-6 text-red-500"/>
+                                <div
+                                  onClick={() => handleDelete(item)}
+                                  className="cursor-pointer"
+                                >
+                                  <TiDelete className="h-6 w-6 text-red-500" />
                                 </div>
                               </div>
                               <p className="text-xs text-gray-700">

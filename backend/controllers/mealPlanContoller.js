@@ -31,10 +31,30 @@ export const saveMealPlan = async (req, res) => {
 export const getMealPlans = async (req, res) => {
   try {
     const mealPlans = await MealPlan.find()
-      .populate("meals.breakfast")
-      .populate("meals.lunch")
-      .populate("meals.dinner")
-      .populate("meals.snacks");
+      .populate({
+        path: "meals.breakfast",
+        populate: {
+          path: "recipeReference",
+        },
+      })
+      .populate({
+        path: "meals.lunch",
+        populate: {
+          path: "recipeReference",
+        },
+      })
+      .populate({
+        path: "meals.dinner",
+        populate: {
+          path: "recipeReference",
+        },
+      })
+      .populate({
+        path: "meals.snacks",
+        populate: {
+          path: "recipeReference",
+        },
+      });
 
     res.status(200).json(mealPlans);
   } catch (err) {

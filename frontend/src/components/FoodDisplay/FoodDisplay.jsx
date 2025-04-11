@@ -25,7 +25,11 @@ const FoodDisplay = ({ category }) => {
       });
   }, []);
 
-  console.log("hello",recipeList, category);
+
+  useEffect(()=>{
+    setRecipeList(food_list)
+  },[])
+
 
   return (
     <div className="food-display" id="food-display">

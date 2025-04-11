@@ -27,6 +27,8 @@ const MenuView = () => {
 
   const [selectedIngredients, setSelectedIngredients] = useState([]);
 
+  const [servingCount, setServingCount] = useState(1);
+
   useEffect(() => {
     axios
       .get(`http://localhost:4000/api/recipe/list/${id}`)
@@ -44,6 +46,7 @@ const MenuView = () => {
   console.log("hello", data);
 
   const addPlan = () => {
+    console.log();
     axios
       .post("http://localhost:4000/api/plans", {
         name: data.name,
@@ -53,6 +56,41 @@ const MenuView = () => {
       .then((res) => {
         console.log(res);
         alert("plan added");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const addServing = () => {
+    setServingCount(servingCount + 1);
+  };
+
+  const minusServing = () => {
+    if (servingCount >= 2) {
+      setServingCount(servingCount - 1);
+    }
+    return;
+  };
+
+  const addToShoppingList = () => {
+    console.log("hello");
+
+    axios
+      .post("http://localhost:4000/api/shopping/add", {
+        userId: 1,
+        items: [
+          {
+            name: data.name,
+            imageDescription: data.image,
+            recipeReference: id,
+            quantity: servingCount,
+          },
+        ],
+      })
+      .then((res) => {
+        console.log(res);
+        alert("List added successfully")
       })
       .catch((err) => {
         console.log(err);
@@ -258,13 +296,21 @@ const MenuView = () => {
         <div className="ingredients-main">
           <div className="ing-cont">
             <h1 className="ing-head">ingredients</h1>
-            <button className="button-to-list">Add to list</button>
+            <button className="button-to-list" onClick={addToShoppingList}>
+              Add to list
+            </button>
           </div>
           <div className="ing-units">
             <div className="serv-ing">
-              <CiCircleMinus />
-              <div>{selectedIngredients.length} servings</div>
-              <IoIosAddCircleOutline />
+              <CiCircleMinus
+                onClick={minusServing}
+                className="cursor-pointer mr-2"
+              />
+              <div>{servingCount} servings</div>
+              <IoIosAddCircleOutline
+                onClick={addServing}
+                className="cursor-pointer ml-2"
+              />
             </div>
             <div>
               <button className="convert-unit-btn">Convert units</button>
@@ -277,6 +323,7 @@ const MenuView = () => {
               selectedIngredients={selectedIngredients}
               data={data.ingredients}
               url={url}
+              servingCount={servingCount}
             />
 
             {/* <Ingridents

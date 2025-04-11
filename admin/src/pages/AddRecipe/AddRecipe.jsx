@@ -314,23 +314,21 @@ const AddRecipe = () => {
         <div className="add-category-price">
           <div className="add-category flex-col">
             <p>Recipe Category</p>
-            <select onChange={onChangeHandler} name="category">
-              <option value="Salad">Salad</option>
-              <option value="Rolls">Rolls</option>
-              <option value="Desserts">Desserts</option>
-              <option value="Sandwich">Sandwich</option>
-              <option value="Cake">Cake</option>
-              <option value="Pure Veg">Vegan</option> 
-            <option value="Pasta">Pasta</option>
-            <option value="Noodles">Noodles</option>
+            <select onChange={onChangeHandler} name="cuisine">
+              <option value="Asian">Asian</option>
+              <option value="Thai">Thai</option>
+              <option value="French">French</option>
+              <option value="Mediterranean">Mediterranean</option>
+              <option value="Vegetarian">Vegetarian</option>
+              <option value="Vegan">Vegan</option>
             </select>
           </div>
         </div>
 
         <div className="add-category-price">
           <div className="add-category flex-col">
-            <p>Cuisine </p>
-            <select onChange={onChangeHandler} name="cuisine">
+            <p>Cusine </p>
+            <select onChange={onChangeHandler} name="cusine">
               <option value="Asian">Asian</option>
               <option value="Thai">Thai</option>
               <option value="French">French</option>
@@ -339,7 +337,7 @@ const AddRecipe = () => {
               <option value="Vegan">Vegan</option>
             </select>
           </div>
-          
+
           <div className="add-price flex-col">
             <p>Prep Time (Mins) </p>
             <input

@@ -9,6 +9,8 @@ import cartRouter from "./routes/cartRoute.js"
 import orderRouter from "./routes/orderRoute.js"
 import plansRouter from "./routes/plansRoute.js"
 import mealPlanRoutes from "./routes/mealPlanRoutes.js"
+import cartRoutes from './routes/cart.js';
+import shoppingRoutes from './routes/shopping.js';
 
 // app config
 const app = express()
@@ -30,7 +32,10 @@ app.use("/api/cart", cartRouter)
 app.use('/api/order', orderRouter)
 app.use('/api/plans', plansRouter)
 app.use("/api/meal-plan", mealPlanRoutes);
+app.use("/api/shopping", shoppingRoutes);
 
+
+app.use('/api/cart', cartRoutes);
 
 
 app.get("/", (req, res) => {
